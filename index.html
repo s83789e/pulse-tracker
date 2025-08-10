@@ -4,44 +4,57 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Pulse</title>
-  <link rel="manifest" href="manifest.webmanifest?v=3">
-  <meta name="theme-color" content="#0a2233">
+  <link rel="manifest" href="manifest.webmanifest?v=4">
+  <meta name="theme-color" content="#0b1520">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <style>
     :root{
-      --bg:#071721; --panel:#0e2a3b; --panel-2:#113247; --text:#e9f6ff; --muted:#9ec7da;
-      --accent:#58b7ff; --good:#5bd3a0; --warn:#ffd166; --bad:#ff6b6b;
+      --bg: #f7f7f5; --card: rgba(255,255,255,.9); --text: #0f172a; --muted:#64748b; --line:#e2e8f0; 
+      --accent:#2563eb; --good:#10b981; --warn:#f59e0b; --bad:#ef4444; --shadow:0 10px 30px rgba(0,0,0,.08);
+      --panel:#ffffff;
+    }
+    @media (prefers-color-scheme: dark){
+      :root{
+        --bg:#0b1520; --card: rgba(18,31,48,.9); --text:#eaf2f8; --muted:#a9c3d6; --line:#183044;
+        --accent:#58b7ff; --shadow:0 10px 30px rgba(0,0,0,.35); --panel:#0f2233;
+      }
     }
     *{box-sizing:border-box}
-    html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
-    header{position:sticky;top:0;background:linear-gradient(180deg, rgba(7,23,33,.95), rgba(7,23,33,.6));backdrop-filter:saturate(140%) blur(10px);z-index:10;border-bottom:1px solid #0f3346}
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),var(--bg));color:var(--text);font-family:-apple-system,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+    header{position:sticky;top:0;background:linear-gradient(180deg, rgba(11,21,32,.9), rgba(11,21,32,.65));backdrop-filter:saturate(140%) blur(10px);z-index:10;border-bottom:1px solid var(--line)}
     header .row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px}
-    .title{font-weight:600;letter-spacing:.3px}
-    .container{padding:16px; max-width:900px; margin:0 auto;}
-    .ring{width:160px;height:160px;border-radius:50%;background:
-      conic-gradient(var(--accent) calc(var(--pct)*1%), #1a4055 0);
-      display:grid;place-items:center;margin:12px auto 8px;position:relative}
-    .ring::after{content:"";position:absolute;inset:10px;border-radius:50%;background:var(--panel)}
-    .ring .val{position:relative;font-size:28px;font-weight:700}
-    .chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:12px 0 16px}
-    .chip{background:var(--panel-2);border:1px solid #214c65;padding:10px 14px;border-radius:999px;font-weight:600}
-    .grid{display:grid;gap:12px;grid-template-columns:repeat(2,1fr)}
-    @media (max-width:700px){.grid{grid-template-columns:1fr}}
-    section{background:var(--panel);border:1px solid #133a52;border-radius:14px;padding:12px 12px 6px}
-    h2{font-size:16px;margin:4px 0 10px;color:var(--muted);font-weight:600}
-    .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-    button, input, select{font:inherit;color:var(--text)}
-    button{background:var(--panel-2);border:1px solid #1c4258;border-radius:12px;padding:10px 12px;font-weight:600}
-    button.primary{background:var(--accent);color:#05141b;border-color:#51a7ea}
-    label{font-size:13px;color:var(--muted)}
-    input[type="number"], input[type="text"], input[type="datetime-local"]{background:#0b2330;border:1px solid #143a4f;border-radius:10px;padding:10px;width:100%}
-    .pillbar{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:10px 0 14px}
-    .pill{padding:12px 16px;border-radius:999px;background:var(--panel-2);border:1px solid #214c65;font-weight:700}
+    .title{font-weight:800;letter-spacing:.3px}
+    .app{padding:16px;max-width:480px;margin:0 auto}
+    .tabs{display:flex;gap:8px;margin:12px 0}
+    .tab{flex:1;padding:12px;border-radius:12px;background:var(--card);border:1.5px solid var(--line);text-align:center;font-weight:700;box-shadow:var(--shadow)}
+    .tab.active{outline:2px solid var(--accent)}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:var(--shadow);margin:12px 0}
+    h2{font-size:15px;margin:2px 0 10px;color:var(--muted);font-weight:800;letter-spacing:.2px}
+    .ring{width:180px;height:180px;border-radius:50%;display:grid;place-items:center;margin:8px auto 6px;position:relative;background:conic-gradient(var(--accent) calc(var(--pct)*1%), rgba(0,0,0,.08) 0)}
+    .ring:after{content:"";position:absolute;inset:12px;border-radius:50%;background:var(--panel)}
+    .ring .val{position:relative;font-size:34px;font-weight:800}
+    .pillbar{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:12px 0}
+    .pill{padding:12px 16px;border-radius:999px;background:transparent;border:1.5px solid var(--accent);color:var(--accent);font-weight:800}
+    .grid{display:grid;gap:12px;grid-template-columns:1fr}
+    .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    input, select, button{font:inherit;color:var(--text)}
+    .input{background:transparent;border:1.8px solid var(--line);border-radius:12px;padding:12px;width:100%}
+    select.input{appearance:none;background-image:linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);background-position:calc(100% - 16px) calc(1em + 2px), calc(100% - 11px) calc(1em + 2px);background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:32px}
+    .btn{background:var(--accent);color:white;border:none;border-radius:12px;padding:12px 14px;font-weight:800;box-shadow:var(--shadow)}
+    .btn.ghost{background:transparent;color:var(--accent);border:1.8px solid var(--accent)}
     .tiny{font-size:12px;color:var(--muted)}
-    .footer{padding:20px 0;color:var(--muted);text-align:center}
-    .hidden{display:none !important}
     .center{display:grid;place-items:center}
-    .badge{padding:6px 10px;border-radius:999px;border:1px solid #214c65;background:#0f2f41;font-size:12px}
+    .badge{padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:var(--card);font-size:12px;font-weight:800}
+    .hidden{display:none !important}
+    /* Stress Shield visuals */
+    .breath{height:220px;display:grid;place-items:center;position:relative;overflow:hidden}
+    .orb{width:54px;height:54px;border-radius:50%;background:var(--accent);filter:blur(0.2px);opacity:.85;animation:breath 8s ease-in-out infinite}
+    .ring-anim{position:absolute;width:200px;height:200px;border-radius:50%;border:2px dashed var(--accent);opacity:.25;animation:ringpulse 8s ease-in-out infinite}
+    @keyframes breath{0%{transform:scale(1)}25%{transform:scale(1.35)}50%{transform:scale(1)}75%{transform:scale(0.85)}100%{transform:scale(1)}}
+    @keyframes ringpulse{0%{transform:scale(1)}25%{transform:scale(1.18)}50%{transform:scale(1)}75%{transform:scale(0.9)}100%{transform:scale(1)}}
+    .progress{height:8px;border-radius:999px;background:rgba(0,0,0,.1);overflow:hidden}
+    .bar{height:100%;width:0;background:var(--accent);border-radius:999px;transition:width .3s ease}
+    .footer{padding:18px 0;color:var(--muted);text-align:center}
   </style>
 </head>
 <body>
@@ -49,111 +62,130 @@
   <div class="row">
     <div class="title">Pulse</div>
     <div class="row">
-      <button id="btn-export">Export CSV</button>
-      <button id="btn-print">Weekly PDF</button>
-      <button id="btn-shield" class="primary">Stress Shield</button>
+      <button id="btn-export" class="btn ghost">Export CSV</button>
+      <button id="btn-print" class="btn ghost">Weekly PDF</button>
+      <button id="btn-shield" class="btn">Stress Shield</button>
     </div>
   </div>
 </header>
 
-<div class="container">
-  <div class="center">
-    <div class="ring" id="scoreRing" style="--pct:0">
-      <div class="val" id="scoreVal">0</div>
+<div class="app">
+  <div class="tabs">
+    <div class="tab active" onclick="show('home')">Home</div>
+    <div class="tab" onclick="show('meal')">Log Meal</div>
+    <div class="tab" onclick="show('shield')">Stress Shield</div>
+    <div class="tab" onclick="show('habits')">Habits</div>
+  </div>
+
+  <!-- HOME -->
+  <div id="home" class="screen">
+    <div class="card center">
+      <div class="ring" id="scoreRing" style="--pct:0"><div class="val" id="scoreVal">0</div></div>
+      <div class="tiny" id="scoreBreakdown"></div>
+      <div class="pillbar">
+        <button class="pill" onclick="show('meal')">+ Meal</button>
+        <button class="pill" onclick="show('shield')">Stress Reset</button>
+        <button class="pill" onclick="show('habits')">+ Habit</button>
+      </div>
     </div>
-    <div class="tiny" id="scoreBreakdown"></div>
-  </div>
-
-  <div class="pillbar">
-    <button class="pill" data-open="log-meal">+ Meal</button>
-    <button class="pill" data-open="log-activity">+ Workout</button>
-    <button class="pill" data-open="log-sleep">+ Sleep</button>
-    <button class="pill" data-open="log-habit">+ Habit</button>
-    <button class="pill" id="start-fast">⏳ Fast</button>
-    <button class="pill" id="log-water">+ Water</button>
-  </div>
-
-  <div class="grid">
-    <section id="today">
-      <h2>Today</h2>
-      <div id="todayList" class="tiny">No entries yet.</div>
-    </section>
-
-    <section id="quests">
+    <div class="card">
       <h2>Quests & Streaks</h2>
       <div class="row">
-        <div class="badge">Streaks: <span id="streakDays">0</span> days</div>
+        <div class="badge">Streak: <span id="streakDays">0</span> days</div>
         <div class="badge">Rest tokens: <span id="restTokens">0</span></div>
+        <div class="badge" id="questBadge">No-Junk Week 0/7</div>
       </div>
-      <div style="margin-top:8px" class="tiny">Active Quest: <span id="activeQuest">No-Junk Week (0/7)</span></div>
-    </section>
+    </div>
+    <div class="card">
+      <h2>Today</h2>
+      <div id="todayList" class="tiny">No entries yet.</div>
+    </div>
+  </div>
 
-    <section id="stressShield">
-      <h2>Stress Shield</h2>
+  <!-- MEAL -->
+  <div id="meal" class="screen hidden">
+    <div class="card">
+      <h2>Quick Log</h2>
       <div class="row">
-        <button onclick="Shield.startBreath()">60s Breathing</button>
-        <button onclick="Shield.startUrgeSurf()">10m Urge Surf</button>
-        <button onclick="Shield.grounding()">5-4-3-2-1</button>
+        <button class="pill" onclick="Log.mealPreset('Breakfast')">Breakfast</button>
+        <button class="pill" onclick="Log.mealPreset('Lunch')">Lunch</button>
+        <button class="pill" onclick="Log.mealPreset('Dinner')">Dinner</button>
+        <button class="pill" onclick="Log.mealPreset('Snack')">Snack</button>
       </div>
-      <div id="shieldUI" class="tiny" style="margin-top:8px"></div>
-    </section>
-
-    <section id="log-meal" class="hidden">
-      <h2>Log Meal</h2>
+    </div>
+    <div class="card">
+      <h2>Photo or Text</h2>
       <div class="row">
-        <button onclick="Log.mealPreset('Breakfast')">Breakfast</button>
-        <button onclick="Log.mealPreset('Lunch')">Lunch</button>
-        <button onclick="Log.mealPreset('Dinner')">Dinner</button>
-        <button onclick="Log.mealPreset('Snack')">Snack</button>
+        <input id="meal-photo" class="input" type="file" accept="image/*">
       </div>
-      <div style="margin-top:8px">
-        <label>Notes (or type “something else”)</label>
-        <input id="meal-notes" type="text" placeholder="e.g., salmon bowl, apple; or something else">
+      <div class="row" style="margin-top:10px">
+        <input id="meal-text" class="input" type="text" placeholder="e.g., 2 eggs, toast, avocado">
+        <button class="btn" onclick="estimateMeal()">Estimate →</button>
       </div>
-      <div class="row" style="margin-top:8px">
-        <div style="flex:1"><label>Calories (opt)</label><input id="meal-cal" type="number" inputmode="numeric"></div>
-        <div style="flex:1"><label>Protein g (opt)</label><input id="meal-pro" type="number" inputmode="numeric"></div>
+      <div class="tiny" id="est-out" style="margin-top:8px"></div>
+      <div class="row" style="margin-top:10px">
+        <input id="meal-cal" class="input" type="number" inputmode="numeric" placeholder="Adjust calories (optional)">
+        <input id="meal-pro" class="input" type="number" inputmode="numeric" placeholder="Protein g (optional)">
       </div>
-      <div class="row" style="margin-top:8px">
-        <button class="primary" onclick="Log.saveMeal()">Save</button>
-        <button onclick="UI.close('log-meal')">Close</button>
+      <div class="row" style="margin-top:10px">
+        <button class="btn" onclick="Log.saveMeal()">Save</button>
+        <button class="btn ghost" onclick="show('home')">Close</button>
       </div>
-    </section>
-
-    <section id="log-activity" class="hidden">
-      <h2>Log Workout</h2>
+      <div class="tiny" style="margin-top:8px">Photo calories need a tiny backend (coming next). Text estimates work now.</div>
+    </div>
+    <div class="card">
+      <h2>Favorites</h2>
       <div class="row">
-        <select id="act-type">
-          <option>Walk</option><option>Run</option><option>Swim</option><option>Bike</option><option>Strength</option><option>Yoga</option>
-        </select>
-        <input id="act-min" type="number" inputmode="numeric" placeholder="min">
-        <input id="act-rpe" type="number" inputmode="numeric" placeholder="RPE (1-10)">
+        <button class="pill" onclick="quickSave(520,'Salmon bowl')">Salmon bowl · 520</button>
+        <button class="pill" onclick="quickSave(150,'Protein yogurt')">Protein yogurt · 150</button>
+        <button class="pill" onclick="quickSave(230,'Green smoothie')">Green smoothie · 230</button>
       </div>
-      <div class="row" style="margin-top:8px">
-        <button class="primary" onclick="Log.saveActivity()">Save</button>
-        <button onclick="UI.close('log-activity')">Close</button>
-      </div>
-    </section>
+    </div>
+  </div>
 
-    <section id="log-sleep" class="hidden">
-      <h2>Log Sleep</h2>
+  <!-- STRESS SHIELD -->
+  <div id="shield" class="screen hidden">
+    <div class="card">
+      <h2>60-Second Breathing</h2>
+      <div class="breath">
+        <div class="ring-anim"></div>
+        <div class="orb"></div>
+      </div>
+      <div class="progress"><div id="breathBar" class="bar" style="width:0%"></div></div>
+      <div class="row" style="margin-top:10px">
+        <button class="btn" onclick="startBreath()">Start</button>
+        <button class="btn ghost" onclick="stopBreath()">Stop</button>
+        <span class="tiny" id="breathLabel">Ready</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Urge Surf · 10:00</h2>
+      <div class="progress"><div id="surfBar" class="bar" style="width:0%"></div></div>
+      <div class="row" style="margin-top:10px">
+        <button class="btn" onclick="startSurf()">Start</button>
+        <button class="btn ghost" onclick="stopSurf()">Stop</button>
+        <span class="tiny" id="surfLabel">Tap bubbles, ride the wave</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Fast Distractions</h2>
       <div class="row">
-        <input id="sleep-start" type="datetime-local">
-        <input id="sleep-end" type="datetime-local">
-        <select id="sleep-quality">
-          <option value="3">OK</option><option value="4">Good</option><option value="5">Great</option><option value="2">Poor</option><option value="1">Bad</option>
-        </select>
+        <button class="pill">3 calf raises</button>
+        <button class="pill">Text a friend</button>
+        <button class="pill">Water sip</button>
+        <button class="pill">Name 3 fish 🐠</button>
       </div>
-      <div class="row" style="margin-top:8px">
-        <button class="primary" onclick="Log.saveSleep()">Save</button>
-        <button onclick="UI.close('log-sleep')">Close</button>
-      </div>
-    </section>
+    </div>
+  </div>
 
-    <section id="log-habit" class="hidden">
+  <!-- HABITS -->
+  <div id="habits" class="screen hidden">
+    <div class="card">
       <h2>Log Habit</h2>
       <div class="row">
-        <select id="habit-type">
+        <select id="habit-type" class="input">
           <option>No Alcohol</option>
           <option>No Junk/Chips</option>
           <option>Mobility 10 min</option>
@@ -161,24 +193,23 @@
           <option>Skincare</option>
           <option>Custom</option>
         </select>
-        <input id="habit-notes" type="text" placeholder="optional note">
+        <input id="habit-notes" class="input" type="text" placeholder="note (optional)">
       </div>
-      <div class="row" style="margin-top:8px">
-        <button class="primary" onclick="Log.saveHabit()">Save</button>
-        <button onclick="UI.close('log-habit')">Close</button>
+      <div class="row" style="margin-top:10px">
+        <button class="btn" onclick="Log.saveHabit()">Save</button>
+        <button class="btn ghost" onclick="show('home')">Close</button>
       </div>
-    </section>
+    </div>
   </div>
 
-  <div class="footer tiny">Local-first • v3</div>
+  <div class="footer tiny">Local-first • v4</div>
 </div>
 
 <script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
-}
+// PWA SW
+if('serviceWorker' in navigator){ window.addEventListener('load', ()=> navigator.serviceWorker.register('./sw.js')); }
 
-// Mini IndexedDB wrapper
+// DB
 const DB = (()=>{
   const DB_NAME='pulse-db', STORE='kv'; let dbp;
   function withStore(type, cb){
@@ -207,76 +238,51 @@ const state = {
   fasting:{active:false, startedAt:null, last:null},
   quest:{name:"No-Junk Week", progress:0, target:7}
 };
-
-async function load(){ const saved=await DB.get('state'); if(saved) Object.assign(state,saved); UI.render(); Import.handleDeepLink(); }
+async function load(){ const saved=await DB.get('state'); if(saved) Object.assign(state,saved); UI.render(); }
 load();
 function save(){ DB.set('state', state); }
 
-// Logging
+// Logging helpers
 const Log = {
-  mealPreset(type){ document.getElementById('meal-notes').value = type; },
+  mealPreset(t){ document.getElementById('meal-text').value = t; },
   async saveMeal(){
-    const notes = document.getElementById('meal-notes').value.trim();
+    const notes = document.getElementById('meal-text').value.trim();
     const cal = +document.getElementById('meal-cal').value || null;
     const pro = +document.getElementById('meal-pro').value || null;
     await addEntry({kind:'meal', ts:Date.now(), notes, cal, pro});
-    UI.close('log-meal');
-  },
-  async saveActivity(){
-    const type = document.getElementById('act-type').value;
-    const min = +document.getElementById('act-min').value || 0;
-    const rpe = +document.getElementById('act-rpe').value || null;
-    await addEntry({kind:'activity', ts:Date.now(), type, min, rpe});
-    UI.close('log-activity');
-  },
-  async saveSleep(){
-    const startVal=document.getElementById('sleep-start').value;
-    const endVal=document.getElementById('sleep-end').value;
-    const start = startVal? new Date(startVal).getTime() : 0;
-    const end = endVal? new Date(endVal).getTime() : 0;
-    const q = +document.getElementById('sleep-quality').value;
-    if(!start || !end || end<=start){ alert('Please set valid start/end'); return; }
-    await addEntry({kind:'sleep', ts:Date.now(), start, end, q});
-    UI.close('log-sleep');
+    show('home');
   },
   async saveHabit(){
     const type = document.getElementById('habit-type').value;
     const notes = document.getElementById('habit-notes').value.trim();
     await addEntry({kind:'habit', ts:Date.now(), type, notes});
-    UI.close('log-habit');
+    show('home');
   }
 };
+async function quickSave(cal, name){ await addEntry({kind:'meal', ts:Date.now(), notes:name, cal, pro:null}); show('home'); }
 
 async function addEntry(entry){
-  const day = dayKey(); const k='day:'+day;
-  const dayData = (await DB.get(k)) || { entries:[] };
+  const k='day:'+dayKey(); const dayData = (await DB.get(k)) || { entries:[] };
   dayData.entries.push(entry); await DB.set(k, dayData);
-  if(entry.kind==='habit' && entry.type==='No Junk/Chips'){
-    state.quest.progress = Math.min(state.quest.target, state.quest.progress+1);
-  }
+  if(entry.kind==='habit' && entry.type==='No Junk/Chips'){ state.quest.progress = Math.min(state.quest.target, state.quest.progress+1); }
   save(); UI.render();
 }
 
-// Score
+// Scoring
 async function calcScore(){
-  const day = dayKey();
-  const dayData = (await DB.get('day:'+day)) || { entries:[] };
+  const dayData = (await DB.get('day:'+dayKey())) || { entries:[] };
   let fuel=0, move=0, recover=0, habits=0;
   const meals = dayData.entries.filter(e=>e.kind==='meal');
   if(meals.length>0) fuel += 10;
   if(meals.some(m=>m.pro)) fuel += 10;
   if(!state.fasting.active && state.fasting.last) fuel +=5;
   fuel = Math.min(25, fuel);
-
   const mins = dayData.entries.filter(e=>e.kind==='activity').reduce((a,b)=>a+(b.min||0),0);
   move = Math.min(25, Math.round((mins/30)*25));
-
   const sleep = dayData.entries.find(e=>e.kind==='sleep');
   if(sleep){ const h=(sleep.end-sleep.start)/3600000; recover = Math.min(25, Math.round((h/state.goals.sleepHours)*25)); }
-
   const hb = dayData.entries.filter(e=>e.kind==='habit').map(e=>e.type);
   const unique = new Set(hb); habits = Math.min(25, Math.round((unique.size/Math.max(1,state.habits.length))*25));
-
   return { total:fuel+move+recover+habits, fuel, move, recover, habits, entries: dayData.entries };
 }
 
@@ -284,128 +290,128 @@ async function calcScore(){
 const UI = {
   async render(){
     const {total,fuel,move,recover,habits,entries} = await calcScore();
-    const pct = Math.round((total/100)*100);
-    document.getElementById('scoreRing').style.setProperty('--pct', pct);
+    document.getElementById('scoreRing').style.setProperty('--pct', Math.round((total/100)*100));
     document.getElementById('scoreVal').textContent = total;
     document.getElementById('scoreBreakdown').textContent = `Fuel ${fuel} • Move ${move} • Recover ${recover} • Habits ${habits}`;
     const list = document.getElementById('todayList');
-    if(entries.length===0){ list.textContent='No entries yet.'; }
-    else{
-      list.innerHTML = entries.slice().reverse().map(e=>{
-        const t = new Date(e.ts).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-        if(e.kind==='meal') return `<div>🍽️ ${t}: ${e.notes||'Meal'} ${e.cal?('· '+e.cal+' kcal'):''}</div>`;
-        if(e.kind==='activity') return `<div>🏃 ${t}: ${e.type} · ${e.min||0} min ${e.rpe?('· RPE '+e.rpe):''}</div>`;
-        if(e.kind==='sleep') return `<div>😴 ${t}: Sleep ${((e.end-e.start)/3600000).toFixed(1)} h · Q${e.q}</div>`;
-        if(e.kind==='habit') return `<div>✅ ${t}: ${e.type}${e.notes?(' · '+e.notes):''}</div>`;
-        return `<div>• ${t}</div>`;
-      }).join('');
-    }
+    list.innerHTML = entries.length? entries.slice().reverse().map(e=>{
+      const t = new Date(e.ts).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+      if(e.kind==='meal') return `<div>🍽️ ${t}: ${e.notes||'Meal'} ${e.cal?('· '+e.cal+' kcal'):''}</div>`;
+      if(e.kind==='activity') return `<div>🏃 ${t}: ${e.type} · ${e.min||0} min ${e.rpe?('· RPE '+e.rpe):''}</div>`;
+      if(e.kind==='sleep') return `<div>😴 ${t}: Sleep ${((e.end-e.start)/3600000).toFixed(1)} h</div>`;
+      if(e.kind==='habit') return `<div>✅ ${t}: ${e.type}${e.notes?(' · '+e.notes):''}</div>`;
+      return `<div>• ${t}</div>`;
+    }).join('') : 'No entries yet.';
     document.getElementById('streakDays').textContent = state.streakDays;
     document.getElementById('restTokens').textContent = state.restTokens;
-    document.getElementById('activeQuest').textContent = `${state.quest.name} (${state.quest.progress}/${state.quest.target})`;
-  },
-  close(id){ document.getElementById(id).classList.add('hidden'); },
-  open(id){ document.getElementById(id).classList.remove('hidden'); }
+    document.getElementById('questBadge').textContent = `${state.quest.name} ${state.quest.progress}/${state.quest.target}`;
+  }
 };
-document.querySelectorAll('[data-open]').forEach(b=> b.addEventListener('click', ()=> UI.open(b.dataset.open)));
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=> s.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+  document.querySelectorAll('.tab').forEach(t=> t.classList.remove('active'));
+  const idx = {home:0, meal:1, shield:2, habits:3}[id];
+  document.querySelectorAll('.tab')[idx].classList.add('active');
+}
 
-// Water quick add
-document.getElementById('log-water').addEventListener('click', async ()=>{
-  await addEntry({kind:'habit', ts: Date.now(), type:'Hydration Goal', notes:'water+'});
-});
-
-// Fasting
-document.getElementById('start-fast').addEventListener('click', ()=>{
-  if(!state.fasting.active){
-    state.fasting.active=true; state.fasting.startedAt=Date.now(); save(); alert('Fasting started');
-  }else{
-    state.fasting.active=false; state.fasting.last=Date.now(); save(); alert('Fasting ended');
-  }
-  UI.render();
-});
-
-// Export CSV
 document.getElementById('btn-export').addEventListener('click', async ()=>{
-  const keys = await DB.keys();
-  const dayKeys = keys.filter(k=>k.startsWith('day:')).sort();
-  const rows = [["date","kind","time","fields"]];
-  for(const k of dayKeys){
-    const d = k.slice(4);
-    const day = await DB.get(k);
-    for(const e of day.entries){
-      const time = new Date(e.ts).toISOString();
-      const fields = JSON.stringify(e);
-      rows.push([d, e.kind, time, fields]);
-    }
-  }
-  const csv = rows.map(r=> r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(",")).join("\n");
-  const blob = new Blob([csv], {type:'text/csv'});
-  const url = URL.createObjectURL(blob);
+  const keys = await DB.keys(); const days = keys.filter(k=>k.startsWith('day:')).sort();
+  const rows=[["date","kind","time","fields"]];
+  for(const k of days){ const d=k.slice(4); const day=await DB.get(k); for(const e of day.entries){ rows.push([d,e.kind,new Date(e.ts).toISOString(), JSON.stringify(e)]); } }
+  const csv = rows.map(r=> r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(",")).join("\\n");
+  const blob = new Blob([csv], {type:'text/csv'}); const url = URL.createObjectURL(blob);
   const a = document.createElement('a'); a.href=url; a.download='pulse-export.csv'; a.click(); URL.revokeObjectURL(url);
 });
-
-// Weekly PDF
 document.getElementById('btn-print').addEventListener('click', ()=> window.print());
+document.getElementById('btn-shield').addEventListener('click', ()=>{ show('shield'); startBreath(); });
 
-// Stress Shield
-const Shield = {
-  _timer:null,
-  startBreath(){
-    const el = document.getElementById('shieldUI');
-    let secs=60, step=0; const sequence=[['Inhale',4],['Hold',4],['Exhale',4],['Hold',4]];
-    clearInterval(this._timer);
-    this._timer = setInterval(()=>{
-      const [label,dur] = sequence[step%4];
-      el.innerHTML = `<div><strong>${label}</strong> · ${dur}s &nbsp;&nbsp; <span class="tiny">${secs}s left</span></div>`;
-      secs--; if(secs<=0){ clearInterval(this._timer); el.textContent='Done. Nice reset.'; return; }
-      step++;
-    }, 1000);
-  },
-  startUrgeSurf(){
-    const el = document.getElementById('shieldUI');
-    let secs=600, score=0;
-    el.innerHTML = '<div>Urge Surf 10:00 · Tap to stay present.</div><div id="game"></div>';
-    const game = document.getElementById('game'); game.style.minHeight='120px'; game.onclick=()=>{ score++; game.innerHTML=`<div class="tiny">Taps: ${score}</div>`; };
-    clearInterval(this._timer);
-    this._timer = setInterval(()=>{
-      secs--; if(secs<=0){ clearInterval(this._timer); el.innerHTML = `Craving passed. You earned a small win badge. Taps: ${score}`; }
-      else el.firstChild.textContent = `Urge Surf ${String(Math.floor(secs/60)).padStart(2,'0')}:${String(secs%60).padStart(2,'0')} · Tap to stay present.`;
-    }, 1000);
-  },
-  grounding(){
-    const prompts = [
-      "Name 5 things you can see.",
-      "Name 4 things you can feel.",
-      "Name 3 things you can hear.",
-      "Name 2 things you can smell.",
-      "Name 1 thing you can taste or are grateful for."
-    ];
-    const el = document.getElementById('shieldUI');
-    el.innerHTML = prompts.map((p,i)=>`<div>${i+1}. ${p}</div>`).join('');
-  }
+// Stress Shield timers
+let breathInt=null, breathPct=0;
+function startBreath(){ clearInterval(breathInt); breathPct=0; document.getElementById('breathLabel').textContent='Inhale…';
+  breathInt=setInterval(()=>{ breathPct += 100/60; document.getElementById('breathBar').style.width = Math.min(100, breathPct)+'%';
+    if(breathPct>=100){ stopBreath(); document.getElementById('breathLabel').textContent='Done ✨'; } }, 1000); }
+function stopBreath(){ clearInterval(breathInt); }
+let surfInt=null, surfPct=0;
+function startSurf(){ clearInterval(surfInt); surfPct=0; document.getElementById('surfLabel').textContent='Surfing…';
+  surfInt=setInterval(()=>{ surfPct += 100/(10*60); document.getElementById('surfBar').style.width = Math.min(100, surfPct)+'%';
+    if(surfPct>=100){ stopSurf(); document.getElementById('surfLabel').textContent='Craving passed ✅'; } }, 1000); }
+function stopSurf(){ clearInterval(surfInt); }
+
+// --- Text calorie estimation ---
+const FOOD_DB = {
+  "egg": {"kcal":78,"protein":6,"carbs":0.6,"fat":5}, // per large egg
+  "eggs": {"kcal":78,"protein":6,"carbs":0.6,"fat":5},
+  "toast": {"kcal":75,"protein":3,"carbs":13,"fat":1}, // per slice white
+  "bread": {"kcal":75,"protein":3,"carbs":13,"fat":1},
+  "avocado": {"kcal":160,"protein":2,"carbs":8.5,"fat":14.7}, // per 100g (~1/2 avocado ~100g)
+  "banana": {"kcal":105,"protein":1.3,"carbs":27,"fat":0.4},
+  "rice": {"kcal":206,"protein":4.3,"carbs":45,"fat":0.4}, // 1 cup cooked
+  "chicken": {"kcal":165,"protein":31,"carbs":0,"fat":3.6}, // per 100g cooked breast
+  "salmon": {"kcal":208,"protein":20,"carbs":0,"fat":13}, // per 100g
+  "yogurt": {"kcal":150,"protein":15,"carbs":6,"fat":4}, // 170g Greek 2%
+  "oats": {"kcal":150,"protein":5,"carbs":27,"fat":3}, // 40g dry
+  "apple": {"kcal":95,"protein":0.5,"carbs":25,"fat":0.3},
+  "olive oil": {"kcal":119,"protein":0,"carbs":0,"fat":13.5}, // 1 tbsp
+  "cheese": {"kcal":113,"protein":7,"carbs":1,"fat":9}, // 28g cheddar
+  "protein powder": {"kcal":120,"protein":24,"carbs":3,"fat":1.5}, // 1 scoop
+  "milk": {"kcal":103,"protein":8,"carbs":12,"fat":2.4}, // 240ml 2%
+  "green smoothie": {"kcal":230,"protein":5,"carbs":45,"fat":3},
+  "salmon bowl": {"kcal":520,"protein":35,"carbs":45,"fat":20}
 };
-
-// Import for Shortcuts: #import?type=steps&steps=5000
-const Import = {
-  async handleDeepLink(){
-    const hash = location.hash || "";
-    if(!hash.startsWith('#import')) return;
-    const qs = new URLSearchParams(hash.split('?')[1]||"");
-    const type = qs.get('type');
-    if(type==='steps'){
-      const steps = parseInt(qs.get('steps')||'0',10);
-      const entry = { kind:'activity', ts: Date.now(), type:'Steps', min: Math.round(steps/100), rpe:null, steps };
-      await addEntry(entry);
-      alert(`Imported ${steps} steps.`);
-      history.replaceState(null, '', location.pathname);
+function parseQty(token){
+  // returns {n: number, unit: "unit|g|cup|tbsp|slice"} defaults to 1 unit
+  const m = token.match(/^(\d+(?:\.\d+)?)(g|gram|grams|cup|cups|tbsp|tsp|slice|slices)?$/i);
+  if(!m) return {n:1, unit:'unit'};
+  let n = parseFloat(m[1]); let u = (m[2]||'unit').toLowerCase();
+  if(u==='gram'||u==='grams') u='g';
+  if(u==='slices') u='slice';
+  return {n, unit:u};
+}
+function estimateMeal(){
+  const text = (document.getElementById('meal-text').value||'').toLowerCase();
+  if(!text){ document.getElementById('est-out').textContent = 'Type something like "2 eggs, toast, avocado".'; return; }
+  const items = text.split(/[,+]/).map(s=> s.trim()).filter(Boolean);
+  let total = {kcal:0, protein:0, carbs:0, fat:0}; let parts=[];
+  for(const raw of items){
+    // try to extract quantity + food (e.g., "2 eggs", "100g chicken")
+    const bits = raw.split(/\s+/);
+    let qty = parseQty(bits[0]);
+    let name = bits.slice(qty.unit==='unit' && !/^\d/.test(bits[0]) ? 0 : 1).join(' ').trim();
+    if(!name) name = bits[bits.length-1];
+    // fallback: if full string matches db key
+    let key = name;
+    if(!(key in FOOD_DB) && raw in FOOD_DB){ key = raw; qty={n:1,unit:'unit'}; }
+    if(!(key in FOOD_DB)){
+      // attempt singular
+      const singular = key.replace(/s\b/,''); if(singular in FOOD_DB) key=singular;
     }
+    if(!(key in FOOD_DB)){ parts.push(`${raw}: ?`); continue; }
+    const base = FOOD_DB[key];
+    // scale by qty
+    let factor = qty.n;
+    if(qty.unit==='g'){ // assume base is per 100g when we know such foods
+      const per100 = ['chicken','salmon','avocado'];
+      factor = (per100.includes(key)? qty.n/100 : qty.n/100); // safe default
+    } else if(qty.unit==='cup'){ if(key==='rice') factor = qty.n; else factor = qty.n; }
+    else if(qty.unit==='tbsp'){ if(key==='olive oil') factor = qty.n; else factor = qty.n*0.5; }
+    else if(qty.unit==='slice'){ if(key==='bread' || key==='toast' || key==='cheese') factor = qty.n; }
+    total.kcal += base.kcal * factor;
+    total.protein += (base.protein||0) * factor;
+    total.carbs += (base.carbs||0) * factor;
+    total.fat += (base.fat||0) * factor;
+    parts.push(`${raw}: ~${Math.round(base.kcal*factor)} kcal`);
   }
-};
+  const out = `≈ ${Math.round(total.kcal)} kcal · P ${Math.round(total.protein)} g · C ${Math.round(total.carbs)} g · F ${Math.round(total.fat)} g ` +
+              `| ${parts.join(' • ')}`;
+  document.getElementById('est-out').textContent = out;
+  document.getElementById('meal-cal').value = Math.round(total.kcal);
+  document.getElementById('meal-pro').value = Math.round(total.protein);
+}
 
-document.getElementById('btn-shield').addEventListener('click', ()=>{
-  document.getElementById('stressShield').scrollIntoView({behavior:'smooth', block:'center'});
-  Shield.startBreath();
-});
+// Water quick add (habit)
+async function quickWater(){ await addEntry({kind:'habit', ts:Date.now(), type:'Hydration Goal', notes:'water+'}); UI.render(); }
+
 </script>
 </body>
 </html>

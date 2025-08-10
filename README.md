@@ -1,1 +1,1 @@
-Pulse v3 full build for GitHub Pages (functional).
+Pulse v4 build with improved UI, Stress Shield animations, and text calorie estimation.
