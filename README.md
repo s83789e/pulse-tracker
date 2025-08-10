@@ -1,1 +1,1 @@
-Pulse v4 build with improved UI, Stress Shield animations, and text calorie estimation.
+Pulse v4.2 with tropical pufferfish breathing orb replacing Stress Shield.

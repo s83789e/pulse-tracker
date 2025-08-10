@@ -1,7 +1,7 @@
 {
   "name": "Pulse",
   "short_name": "Pulse",
-  "description": "Calm, local-first health & habit tracker with Stress Shield.",
+  "description": "Calm, local-first health & habit tracker.",
   "start_url": "index.html",
   "scope": "./",
   "display": "standalone",
