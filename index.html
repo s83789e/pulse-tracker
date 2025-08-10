@@ -4,23 +4,16 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Pulse</title>
-  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="manifest" href="manifest.webmanifest?v=3">
   <meta name="theme-color" content="#0a2233">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <style>
     :root{
-      --bg:#071721;
-      --panel:#0e2a3b;
-      --panel-2:#113247;
-      --text:#e9f6ff;
-      --muted:#9ec7da;
-      --accent:#58b7ff;
-      --good:#5bd3a0;
-      --warn:#ffd166;
-      --bad:#ff6b6b;
+      --bg:#071721; --panel:#0e2a3b; --panel-2:#113247; --text:#e9f6ff; --muted:#9ec7da;
+      --accent:#58b7ff; --good:#5bd3a0; --warn:#ffd166; --bad:#ff6b6b;
     }
     *{box-sizing:border-box}
-    html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:-apple-system, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif}
+    html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
     header{position:sticky;top:0;background:linear-gradient(180deg, rgba(7,23,33,.95), rgba(7,23,33,.6));backdrop-filter:saturate(140%) blur(10px);z-index:10;border-bottom:1px solid #0f3346}
     header .row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px}
     .title{font-weight:600;letter-spacing:.3px}
@@ -41,10 +34,9 @@
     button{background:var(--panel-2);border:1px solid #1c4258;border-radius:12px;padding:10px 12px;font-weight:600}
     button.primary{background:var(--accent);color:#05141b;border-color:#51a7ea}
     label{font-size:13px;color:var(--muted)}
-    input[type="number"], input[type="text"]{background:#0b2330;border:1px solid #143a4f;border-radius:10px;padding:10px;width:100%}
+    input[type="number"], input[type="text"], input[type="datetime-local"]{background:#0b2330;border:1px solid #143a4f;border-radius:10px;padding:10px;width:100%}
     .pillbar{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:10px 0 14px}
     .pill{padding:12px 16px;border-radius:999px;background:var(--panel-2);border:1px solid #214c65;font-weight:700}
-    .success{color:var(--good)} .warn{color:var(--warn)} .bad{color:var(--bad)}
     .tiny{font-size:12px;color:var(--muted)}
     .footer{padding:20px 0;color:var(--muted);text-align:center}
     .hidden{display:none !important}
@@ -178,19 +170,17 @@
     </section>
   </div>
 
-  <div class="footer tiny">Local-first • FaceID lock in Settings (coming next) • v1</div>
+  <div class="footer tiny">Local-first • v3</div>
 </div>
 
 <script>
-// --- PWA SW ---
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js'));
 }
 
-// --- Simple local store (IndexedDB via minimal wrapper) ---
+// Mini IndexedDB wrapper
 const DB = (()=>{
-  const DB_NAME = 'pulse-db', STORE='kv';
-  let dbp;
+  const DB_NAME='pulse-db', STORE='kv'; let dbp;
   function withStore(type, cb){
     return (dbp || (dbp = new Promise((res, rej)=>{
       const open = indexedDB.open(DB_NAME, 1);
@@ -198,148 +188,112 @@ const DB = (()=>{
       open.onsuccess = ()=> res(open.result);
       open.onerror = ()=> rej(open.error);
     }))).then(db=> new Promise((res, rej)=>{
-      const tx = db.transaction(STORE, type);
-      const store = tx.objectStore(STORE);
-      cb(store);
-      tx.oncomplete = ()=> res();
-      tx.onerror = ()=> rej(tx.error);
+      const tx = db.transaction(STORE, type); const store = tx.objectStore(STORE);
+      cb(store); tx.oncomplete=()=>res(); tx.onerror=()=>rej(tx.error);
     }));
   }
   return {
-    async get(key){ return new Promise((res, rej)=> withStore('readonly', store=>{
-      const req = store.get(key); req.onsuccess = ()=> res(req.result); req.onerror = ()=> rej(req.error);
-    }));},
-    async set(key, val){ return withStore('readwrite', store=> store.put(val, key)); },
-    async del(key){ return withStore('readwrite', store=> store.delete(key)); },
-    async keys(){ return new Promise((res, rej)=> withStore('readonly', store=>{
-      const ks=[]; const cur = store.openCursor();
-      cur.onsuccess = ()=>{ const c=cur.result; if(c){ ks.push(c.key); c.continue(); } else res(ks); };
-      cur.onerror = ()=> rej(cur.error);
-    }));}
+    async get(k){ return new Promise((res,rej)=> withStore('readonly', s=>{ const r=s.get(k); r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error);})); },
+    async set(k,v){ return withStore('readwrite', s=> s.put(v,k)); },
+    async keys(){ return new Promise((res,rej)=> withStore('readonly', s=>{ const ks=[]; const c=s.openCursor(); c.onsuccess=()=>{const cur=c.result; if(cur){ks.push(cur.key); cur.continue();} else res(ks);}; c.onerror=()=>rej(c.error);})); }
   }
 })();
 
 const dayKey = (d=new Date()) => d.toISOString().slice(0,10);
 const state = {
-  goals: { kcal: null, protein: null, weeklyMinutes: 150, workoutsPerWeek: 3, sleepHours: 7, water: 2000 },
-  habits: ["No Alcohol","No Junk/Chips","Mobility 10 min","Hydration Goal","Skincare"],
-  restTokens: 0,
-  streakDays: 0,
-  fasting: { active:false, startedAt:null },
-  quest: { name:"No-Junk Week", progress:0, target:7 }
+  goals:{kcal:null,protein:null,weeklyMinutes:150,workoutsPerWeek:3,sleepHours:7,water:2000},
+  habits:["No Alcohol","No Junk/Chips","Mobility 10 min","Hydration Goal","Skincare"],
+  restTokens:0, streakDays:0,
+  fasting:{active:false, startedAt:null, last:null},
+  quest:{name:"No-Junk Week", progress:0, target:7}
 };
 
-async function load(){
-  const saved = await DB.get('state');
-  if(saved) Object.assign(state, saved);
-  UI.render();
-  Import.handleDeepLink();
-}
+async function load(){ const saved=await DB.get('state'); if(saved) Object.assign(state,saved); UI.render(); Import.handleDeepLink(); }
 load();
-
 function save(){ DB.set('state', state); }
 
-// --- Logging ---
+// Logging
 const Log = {
   mealPreset(type){ document.getElementById('meal-notes').value = type; },
   async saveMeal(){
     const notes = document.getElementById('meal-notes').value.trim();
     const cal = +document.getElementById('meal-cal').value || null;
     const pro = +document.getElementById('meal-pro').value || null;
-    const entry = { kind:'meal', ts: Date.now(), notes, cal, pro };
-    await addEntry(entry);
+    await addEntry({kind:'meal', ts:Date.now(), notes, cal, pro});
     UI.close('log-meal');
   },
   async saveActivity(){
     const type = document.getElementById('act-type').value;
     const min = +document.getElementById('act-min').value || 0;
     const rpe = +document.getElementById('act-rpe').value || null;
-    const entry = { kind:'activity', ts: Date.now(), type, min, rpe };
-    await addEntry(entry);
+    await addEntry({kind:'activity', ts:Date.now(), type, min, rpe});
     UI.close('log-activity');
   },
   async saveSleep(){
-    const start = new Date(document.getElementById('sleep-start').value).getTime();
-    const end = new Date(document.getElementById('sleep-end').value).getTime();
+    const startVal=document.getElementById('sleep-start').value;
+    const endVal=document.getElementById('sleep-end').value;
+    const start = startVal? new Date(startVal).getTime() : 0;
+    const end = endVal? new Date(endVal).getTime() : 0;
     const q = +document.getElementById('sleep-quality').value;
-    if(!start || !end || end <= start){ alert('Please set valid start/end'); return; }
-    const entry = { kind:'sleep', ts: Date.now(), start, end, q };
-    await addEntry(entry);
+    if(!start || !end || end<=start){ alert('Please set valid start/end'); return; }
+    await addEntry({kind:'sleep', ts:Date.now(), start, end, q});
     UI.close('log-sleep');
   },
   async saveHabit(){
     const type = document.getElementById('habit-type').value;
     const notes = document.getElementById('habit-notes').value.trim();
-    const entry = { kind:'habit', ts: Date.now(), type, notes };
-    await addEntry(entry);
+    await addEntry({kind:'habit', ts:Date.now(), type, notes});
     UI.close('log-habit');
   }
 };
 
 async function addEntry(entry){
-  const day = dayKey();
-  const k = 'day:'+day;
+  const day = dayKey(); const k='day:'+day;
   const dayData = (await DB.get(k)) || { entries:[] };
-  dayData.entries.push(entry);
-  await DB.set(k, dayData);
-  if(entry.kind==='habit'){
-    if(entry.type==='No Junk/Chips'){
-      // increment quest if marked as achieved (no junk logged as success)
-      state.quest.progress = Math.min(state.quest.target, state.quest.progress + 1);
-    }
+  dayData.entries.push(entry); await DB.set(k, dayData);
+  if(entry.kind==='habit' && entry.type==='No Junk/Chips'){
+    state.quest.progress = Math.min(state.quest.target, state.quest.progress+1);
   }
-  save();
-  UI.render();
+  save(); UI.render();
 }
 
-// --- Score calculation ---
+// Score
 async function calcScore(){
   const day = dayKey();
   const dayData = (await DB.get('day:'+day)) || { entries:[] };
   let fuel=0, move=0, recover=0, habits=0;
-  // Fuel: partial for any meals logged + optional calories/protein presence
   const meals = dayData.entries.filter(e=>e.kind==='meal');
   if(meals.length>0) fuel += 10;
   if(meals.some(m=>m.pro)) fuel += 10;
-  if(state.fasting.active===false && state.fasting.last && (Date.now()-state.fasting.last)>0) fuel +=5;
+  if(!state.fasting.active && state.fasting.last) fuel +=5;
   fuel = Math.min(25, fuel);
 
-  // Move: minutes logged vs 30 min target/day proxy
   const mins = dayData.entries.filter(e=>e.kind==='activity').reduce((a,b)=>a+(b.min||0),0);
   move = Math.min(25, Math.round((mins/30)*25));
 
-  // Recover: sleep hours vs goal
   const sleep = dayData.entries.find(e=>e.kind==='sleep');
-  if(sleep){
-    const h = (sleep.end - sleep.start)/3600000;
-    recover = Math.min(25, Math.round((h / state.goals.sleepHours)*25));
-  }
+  if(sleep){ const h=(sleep.end-sleep.start)/3600000; recover = Math.min(25, Math.round((h/state.goals.sleepHours)*25)); }
 
-  // Habits: count completed habits today
   const hb = dayData.entries.filter(e=>e.kind==='habit').map(e=>e.type);
-  const unique = new Set(hb);
-  habits = Math.min(25, Math.round((unique.size / Math.max(1,state.habits.length))*25));
+  const unique = new Set(hb); habits = Math.min(25, Math.round((unique.size/Math.max(1,state.habits.length))*25));
 
-  const total = fuel+move+recover+habits;
-  return { total, fuel, move, recover, habits, entries: dayData.entries };
+  return { total:fuel+move+recover+habits, fuel, move, recover, habits, entries: dayData.entries };
 }
 
-// --- UI ---
+// UI
 const UI = {
   async render(){
     const {total,fuel,move,recover,habits,entries} = await calcScore();
     const pct = Math.round((total/100)*100);
-    const ring = document.getElementById('scoreRing');
-    const val = document.getElementById('scoreVal');
-    ring.style.setProperty('--pct', pct);
-    val.textContent = total;
+    document.getElementById('scoreRing').style.setProperty('--pct', pct);
+    document.getElementById('scoreVal').textContent = total;
     document.getElementById('scoreBreakdown').textContent = `Fuel ${fuel} • Move ${move} • Recover ${recover} • Habits ${habits}`;
     const list = document.getElementById('todayList');
-    if(entries.length===0){ list.textContent = 'No entries yet.'; }
+    if(entries.length===0){ list.textContent='No entries yet.'; }
     else{
       list.innerHTML = entries.slice().reverse().map(e=>{
         const t = new Date(e.ts).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-        if(e.kind==='meal') return `<div>🍽️ ${t}: ${e.notes || 'Meal'} ${e.cal?('· '+e.cal+' kcal'):''}</div>`;
+        if(e.kind==='meal') return `<div>🍽️ ${t}: ${e.notes||'Meal'} ${e.cal?('· '+e.cal+' kcal'):''}</div>`;
         if(e.kind==='activity') return `<div>🏃 ${t}: ${e.type} · ${e.min||0} min ${e.rpe?('· RPE '+e.rpe):''}</div>`;
         if(e.kind==='sleep') return `<div>😴 ${t}: Sleep ${((e.end-e.start)/3600000).toFixed(1)} h · Q${e.q}</div>`;
         if(e.kind==='habit') return `<div>✅ ${t}: ${e.type}${e.notes?(' · '+e.notes):''}</div>`;
@@ -357,17 +311,15 @@ document.querySelectorAll('[data-open]').forEach(b=> b.addEventListener('click',
 
 // Water quick add
 document.getElementById('log-water').addEventListener('click', async ()=>{
-  await addEntry({kind:'habit', ts: Date.now(), type:'Hydration Goal', notes:'water+’});
+  await addEntry({kind:'habit', ts: Date.now(), type:'Hydration Goal', notes:'water+'});
 });
 
 // Fasting
 document.getElementById('start-fast').addEventListener('click', ()=>{
   if(!state.fasting.active){
-    state.fasting.active=true; state.fasting.startedAt=Date.now(); save();
-    alert('Fasting started');
+    state.fasting.active=true; state.fasting.startedAt=Date.now(); save(); alert('Fasting started');
   }else{
-    state.fasting.active=false; state.fasting.last=Date.now(); save();
-    alert('Fasting ended');
+    state.fasting.active=false; state.fasting.last=Date.now(); save(); alert('Fasting ended');
   }
   UI.render();
 });
@@ -386,14 +338,13 @@ document.getElementById('btn-export').addEventListener('click', async ()=>{
       rows.push([d, e.kind, time, fields]);
     }
   }
-  const csv = rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(",")).join("\n");
+  const csv = rows.map(r=> r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(",")).join("\n");
   const blob = new Blob([csv], {type:'text/csv'});
   const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href=url; a.download='pulse-export.csv'; a.click();
-  URL.revokeObjectURL(url);
+  const a = document.createElement('a'); a.href=url; a.download='pulse-export.csv'; a.click(); URL.revokeObjectURL(url);
 });
 
-// Weekly PDF (uses print CSS via window.print)
+// Weekly PDF
 document.getElementById('btn-print').addEventListener('click', ()=> window.print());
 
 // Stress Shield
@@ -401,28 +352,24 @@ const Shield = {
   _timer:null,
   startBreath(){
     const el = document.getElementById('shieldUI');
-    let secs=60, phase=0, phases=[4,4,4,4]; // box breathing
-    el.innerHTML = 'Breathing…';
+    let secs=60, step=0; const sequence=[['Inhale',4],['Hold',4],['Exhale',4],['Hold',4]];
     clearInterval(this._timer);
     this._timer = setInterval(()=>{
-      if(secs<=0){ clearInterval(this._timer); el.textContent='Done. Nice reset.'; return; }
-      const p = phases[phase%4];
-      const mode = ['Inhale','Hold','Exhale','Hold'][phase%4];
-      el.innerHTML = `<div><strong>${mode}</strong> · ${p}s &nbsp;&nbsp; <span class="tiny">${secs}s left</span></div>`;
-      phase++; secs -= p;
+      const [label,dur] = sequence[step%4];
+      el.innerHTML = `<div><strong>${label}</strong> · ${dur}s &nbsp;&nbsp; <span class="tiny">${secs}s left</span></div>`;
+      secs--; if(secs<=0){ clearInterval(this._timer); el.textContent='Done. Nice reset.'; return; }
+      step++;
     }, 1000);
   },
   startUrgeSurf(){
     const el = document.getElementById('shieldUI');
     let secs=600, score=0;
-    el.innerHTML = '<div>Urge Surf 10:00 · Tap the bubbles to stay present.</div><div id="game"></div>';
-    const game = document.getElementById('game');
-    game.style.minHeight='120px';
-    game.onclick = ()=>{ score++; el.querySelector('#game').innerHTML = `<div class="tiny">Taps: ${score}</div>`; };
+    el.innerHTML = '<div>Urge Surf 10:00 · Tap to stay present.</div><div id="game"></div>';
+    const game = document.getElementById('game'); game.style.minHeight='120px'; game.onclick=()=>{ score++; game.innerHTML=`<div class="tiny">Taps: ${score}</div>`; };
     clearInterval(this._timer);
     this._timer = setInterval(()=>{
       secs--; if(secs<=0){ clearInterval(this._timer); el.innerHTML = `Craving passed. You earned a small win badge. Taps: ${score}`; }
-      else el.firstChild.textContent = `Urge Surf ${String(Math.floor(secs/60)).padStart(2,'0')}:${String(secs%60).padStart(2,'0')} · Tap the bubbles to stay present.`;
+      else el.firstChild.textContent = `Urge Surf ${String(Math.floor(secs/60)).padStart(2,'0')}:${String(secs%60).padStart(2,'0')} · Tap to stay present.`;
     }, 1000);
   },
   grounding(){
@@ -438,7 +385,7 @@ const Shield = {
   }
 };
 
-// Import via URL for Shortcuts: #import?steps=5000&type=steps&date=YYYY-MM-DD
+// Import for Shortcuts: #import?type=steps&steps=5000
 const Import = {
   async handleDeepLink(){
     const hash = location.hash || "";
@@ -455,7 +402,6 @@ const Import = {
   }
 };
 
-// Simple modal opens
 document.getElementById('btn-shield').addEventListener('click', ()=>{
   document.getElementById('stressShield').scrollIntoView({behavior:'smooth', block:'center'});
   Shield.startBreath();

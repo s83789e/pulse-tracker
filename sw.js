@@ -1,5 +1,6 @@
 self.addEventListener('install', e=>{
-  e.waitUntil(caches.open('pulse-cache-v1').then(cache=> cache.addAll([
+  self.skipWaiting();
+  e.waitUntil(caches.open('pulse-cache-v3').then(cache=> cache.addAll([
     './','./index.html','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png'
   ])));
 });
