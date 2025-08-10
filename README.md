@@ -1,1 +1,1 @@
-Pulse v4.2 with tropical pufferfish breathing orb replacing Stress Shield.
+Pulse v4.3 with Dive Mode Stress Shield (diver ascent + mini-games).
