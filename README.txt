@@ -1,4 +1,3 @@
-Pulse v4.3.1
-- Stress Shield: Diver ascend + fish facing direction, bubble burst full area (no zoom), Name 3 Fish with photos, Hidden marine life in coral garden.
-- PWA ready (install from Safari > Share > Add to Home Screen).
-Upload all files to your GitHub Pages repo, including icons/.
+Pulse v4.3.2 • Pufferfish breather restored • Real fish photos • Quiz auto-advance
+Upload all files (including icons/) to your GitHub Pages repo. Open with ?v=432 to bypass cache.
+Photo credits: Wikimedia Commons / NOAA (public domain or CC BY).
