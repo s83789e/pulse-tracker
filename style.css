@@ -15,8 +15,11 @@ h1{margin:0;font-size:20px}.app{padding:16px;max-width:480px;margin:0 auto}
 .depth{position:absolute;left:8px;top:8px;background:rgba(0,0,0,.25);padding:6px 8px;border-radius:10px;border:1px solid rgba(255,255,255,.35)}
 .progress{position:absolute;right:8px;top:8px;width:10px;height:320px;border-radius:999px;background:rgba(255,255,255,.18);overflow:hidden;border:1px solid rgba(255,255,255,.35)}
 .progress .bar{position:absolute;bottom:0;width:100%;height:0;background:linear-gradient(#58b7ff,#9fe1ff)}
-.diver{position:absolute;left:50%;transform:translateX(-50%);width:42px;height:42px;border-radius:10px;background:#55c6ff;border:2px solid #00384f;display:grid;place-items:center;box-shadow:0 6px 18px rgba(0,0,0,.4)}.diver:after{content:'🤿';font-size:24px}
-.fish{position:absolute;width:52px;height:28px}.fish svg{width:100%;height:100%;display:block;transform-origin:center center}.fish.photographed{outline:2px solid #fff;border-radius:6px}
+.diver{position:absolute;left:50%;transform:translateX(-50%);width:88px;height:64px;/* diver size reference */}
+.diver svg{display:block;width:100%;height:100%}
+.fish{position:absolute}
+.fish svg{width:100%;height:100%;display:block;transform-origin:center center}
+.fish.photographed{outline:2px solid #fff;border-radius:6px}
 .bubbles{position:absolute;inset:0;pointer-events:none}.bubble{position:absolute;bottom:-20px;width:8px;height:8px;background:rgba(255,255,255,.3);border-radius:50%;animation:rise 6s linear infinite}
 @keyframes rise{0%{transform:translateY(0) scale(1)}100%{transform:translateY(-400px) scale(1.2)}}
 .hud{display:flex;align-items:center;justify-content:space-between;margin:8px 0 4px}
@@ -27,6 +30,4 @@ h1{margin:0;font-size:20px}.app{padding:16px;max-width:480px;margin:0 auto}
 .photo{width:100%;border-radius:12px;overflow:hidden;border:1px solid var(--line);margin-bottom:8px}.photo img{display:block;width:100%;height:auto}
 .chips{display:flex;gap:10px;flex-wrap:wrap}.chip{padding:10px 14px;border-radius:999px;background:#14354a;border:1px solid #275b79;cursor:pointer;color:#eaf2f8}
 .chip.correct{background:#0f3f2e;border-color:#1b7a56}.chip.wrong{background:#402222;border-color:#7a3131}
-.garden{position:relative;height:260px;border-radius:12px;overflow:hidden;border:1px solid #174d67;background:linear-gradient(#0c3650,#0a2740)}
-.coral{position:absolute;border-radius:30px / 20px;opacity:.95}
 footer{color:var(--muted);text-align:center;padding:16px 0}
