@@ -1,20 +1,56 @@
 <!doctype html><html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <title>Pulse v4.3.5</title><link rel="manifest" href="manifest.webmanifest?v=435"><meta name="theme-color" content="#0b1520">
-<link rel="apple-touch-icon" href="icons/icon-192.png"><link rel="stylesheet" href="style.css?v=435"></head>
+<link rel="apple-touch-icon" href="icon-192.png"><link rel="stylesheet" href="style.css?v=435"></head>
 <body>
-<header><div class="row"><h1>Pulse</h1><div class="row"><button id="btn-print" class="btn ghost">Weekly PDF</button><button id="btn-shield" class="btn">Stress Shield</button></div></div></header>
+<header><div class="row"><h1>Pulse</h1><div class="row"><button id="btn-shield" class="btn">Stress Shield</button></div></div></header>
 <div class="app">
   <div class="tabs"><div class="tab active" onclick="show('home')">Home</div><div class="tab" onclick="show('shield')">Stress Shield</div></div>
-  <div id="home" class="screen"><div class="card"><div class="tiny">Welcome back.</div><div class="row" style="margin-top:10px"><button class="pill" onclick="show('shield')')">Stress Reset</button></div></div></div>
+  <div id="home" class="screen">
+    <div class="card"><div class="tiny">Welcome back.</div>
+      <div class="row" style="margin-top:10px"><button class="pill" onclick="show('shield')">Stress Reset</button></div>
+    </div>
+    <div class="card">
+      <h3>Bubble Burst</h3>
+      <div class="row">
+        <button class="btn" onclick="startBubbles()">Start</button>
+        <button class="btn ghost" onclick="stopBubbles()">Stop</button>
+        <div class="tiny">Score: <span id="bubbleScore">0</span></div>
+      </div>
+      <div class="popsea" id="popsea"></div>
+    </div>
+  </div>
+
   <div id="shield" class="screen hidden">
-    <div class="card"><h2>Tropical Pufferfish Breather</h2><canvas id="puffer" width="260" height="260" class="puffer"></canvas>
-      <div class="row" style="justify-content:center"><button class="btn" onclick="Breath.start()">Start</button><button class="btn ghost" onclick="Breath.stop()">Stop</button></div>
-      <div class="tiny" style="text-align:center">Inhale 4 • Hold 2 • Exhale 6</div></div>
-    <div class="card diveCard"><div class="diveSea" id="dive"><div class="rays"></div><div class="depth" id="depth">Depth: 10 m</div>
-      <div class="progress"><div class="bar" id="ascBar"></div></div><div class="diver" id="diver" style="top:300px"></div><div class="bubbles" id="bubbles"></div><div id="fishLayer"></div></div>
-      <div class="hud"><div class="tiny" id="timerLabel">Ready • 10:00</div><div class="tiny">Photos: <span id="photos">0</span></div></div>
-      <div class="row" style="margin-bottom:8px"><button class="btn" onclick="startDive(600)">Start 10:00</button><button class="btn ghost" onclick="startDive(60)">Demo 1:00</button><button class="btn ghost" onclick="stopDive()">Stop</button></div></div>
+    <div class="card">
+      <h2>Tropical Pufferfish Breather</h2>
+      <canvas id="puffer" width="260" height="260" class="puffer"></canvas>
+      <div class="row" style="justify-content:center">
+        <button class="btn" onclick="Breath.start()">Start</button>
+        <button class="btn ghost" onclick="Breath.stop()">Stop</button>
+      </div>
+      <div class="tiny" style="text-align:center">Inhale 4 • Hold 2 • Exhale 6</div>
+    </div>
+
+    <div class="card diveCard">
+      <div class="diveSea" id="dive">
+        <div class="rays"></div>
+        <div class="depth" id="depth">Depth: 10 m</div>
+        <div class="progress"><div class="bar" id="ascBar"></div></div>
+        <div class="diver" id="diver" style="top:300px"></div>
+        <div class="bubbles" id="bubbles"></div>
+        <div id="fishLayer"></div>
+      </div>
+      <div class="hud">
+        <div class="tiny" id="timerLabel">Ready • 10:00</div>
+        <div class="tiny">Photos: <span id="photos">0</span></div>
+      </div>
+      <div class="row" style="margin-bottom:8px">
+        <button class="btn" onclick="startDive(600)">Start 10:00</button>
+        <button class="btn ghost" onclick="startDive(60)">Demo 1:00</button>
+        <button class="btn ghost" onclick="stopDive()">Stop</button>
+      </div>
+    </div>
   </div>
 </div>
 <footer>Local-first • v4.3.5</footer>
