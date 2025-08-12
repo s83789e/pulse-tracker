@@ -2,7 +2,7 @@
 *{box-sizing:border-box}html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,system-ui,Segoe UI,Roboto,Helvetica,Arial}
 header{position:sticky;top:0;background:linear-gradient(180deg,rgba(11,21,32,.9),rgba(11,21,32,.65));border-bottom:1px solid var(--line);z-index:10}
 header .row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px}
-h1{margin:0;font-size:20px}.app{padding:16px;max-width:480px;margin:0 auto}
+h1{margin:0;font-size:20px}.app{padding:16px;max-width:520px;margin:0 auto}
 .tabs{display:flex;gap:8px;margin:12px 0}.tab{flex:1;padding:12px;border-radius:12px;background:var(--card);border:1.5px solid var(--line);text-align:center;font-weight:700}.tab.active{outline:2px solid var(--accent)}
 .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:0 10px 30px rgba(0,0,0,.35);margin:12px 0}.tiny{font-size:12px;color:var(--muted)}.hidden{display:none!important}
 .btn{background:var(--accent);color:#06131e;border:none;border-radius:12px;padding:12px 14px;font-weight:800}.btn.ghost{background:transparent;color:var(--accent);border:1.6px solid var(--accent)}.pill{padding:10px 14px;border-radius:999px;background:transparent;border:1.6px solid var(--accent);color:var(--accent);font-weight:800}
@@ -19,14 +19,21 @@ h1{margin:0;font-size:20px}.app{padding:16px;max-width:480px;margin:0 auto}
 .progress .bar{position:absolute;bottom:0;width:100%;height:0;background:linear-gradient(#58b7ff,#9fe1ff)}
 .diver{position:absolute;left:50%;transform:translateX(-50%);width:88px;height:64px}
 .diver svg{display:block;width:100%;height:100%}
-.fish{position:absolute}
-.fish svg{width:100%;height:100%;display:block;transform-origin:center center}
+.fish{position:absolute}.fish svg{width:100%;height:100%;display:block;transform-origin:center center}
 .fish.photographed{outline:2px solid #fff;border-radius:6px}
 .bubbles{position:absolute;inset:0;pointer-events:none}.bubble{position:absolute;bottom:-20px;width:8px;height:8px;background:rgba(255,255,255,.3);border-radius:50%;animation:rise 6s linear infinite}
 @keyframes rise{0%{transform:translateY(0) scale(1)}100%{transform:translateY(-400px) scale(1.2)}}
 .hud{display:flex;align-items:center;justify-content:space-between;margin:8px 0 4px}
+.grid{display:grid;grid-template-columns:1fr;gap:12px}.game{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px}
 /* Bubble Burst */
 .popsea{position:relative;height:260px;border-radius:12px;background:radial-gradient(80% 60% at 50% 0%,var(--sea1) 0%,var(--sea2) 40%,var(--sea3) 90%);overflow:hidden;border:1px solid #174d67;touch-action:none}
 .pop{position:absolute;bottom:-30px;width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.35);animation:float 7s linear forwards}
 @keyframes float{to{transform:translateY(-300px)}}
+/* Name 3 Fish */
+.photo{width:100%;border-radius:12px;overflow:hidden;border:1px solid var(--line);margin-bottom:8px}.photo img{display:block;width:100%;height:auto}
+.chips{display:flex;gap:10px;flex-wrap:wrap}.chip{padding:10px 14px;border-radius:999px;background:#14354a;border:1px solid #275b79;cursor:pointer;color:#eaf2f8}
+.chip.correct{background:#0f3f2e;border-color:#1b7a56}.chip.wrong{background:#402222;border-color:#7a3131}
+/* Hidden fish coral */
+.garden{position:relative;height:260px;border-radius:12px;overflow:hidden;border:1px solid #174d67;background:linear-gradient(#0c3650,#0a2740)}
+.coral{position:absolute;border-radius:30px / 20px;opacity:.95}
 footer{color:var(--muted);text-align:center;padding:16px 0}
