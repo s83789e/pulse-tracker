@@ -1,14 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Pulse v4.3.3</title>
-<link rel="stylesheet" href="style.css" />
-<script defer src="script.js"></script>
-</head>
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Pulse v4.3.4</title><link rel="manifest" href="manifest.webmanifest?v=434"><meta name="theme-color" content="#0b1520">
+<link rel="apple-touch-icon" href="icons/icon-192.png"><link rel="stylesheet" href="style.css?v=434"></head>
 <body>
-<h1>Pulse v4.3.3</h1>
-<p>Pufferfish breather restored, fish direction fixed, hidden fish with rotating coral scenes.</p>
-</body>
-</html>
+<header><div class="row"><h1>Pulse</h1><div class="row"><button id="btn-print" class="btn ghost">Weekly PDF</button><button id="btn-shield" class="btn">Stress Shield</button></div></div></header>
+<div class="app">
+  <div class="tabs"><div class="tab active" onclick="show('home')">Home</div><div class="tab" onclick="show('shield')">Stress Shield</div></div>
+  <div id="home" class="screen"><div class="card"><div class="tiny">Welcome back.</div><div class="row" style="margin-top:10px"><button class="pill" onclick="show('shield')">Stress Reset</button></div></div></div>
+  <div id="shield" class="screen hidden">
+    <div class="card"><h2>Tropical Pufferfish Breather</h2><canvas id="puffer" width="260" height="260" class="puffer"></canvas>
+      <div class="row" style="justify-content:center"><button class="btn" onclick="Breath.start()">Start</button><button class="btn ghost" onclick="Breath.stop()">Stop</button></div>
+      <div class="tiny" style="text-align:center">Inhale 4 • Hold 2 • Exhale 6</div></div>
+    <div class="card diveCard"><div class="diveSea" id="dive"><div class="rays"></div><div class="depth" id="depth">Depth: 10 m</div>
+      <div class="progress"><div class="bar" id="ascBar"></div></div><div class="diver" id="diver" style="top:300px"></div><div class="bubbles" id="bubbles"></div><div id="fishLayer"></div></div>
+      <div class="hud"><div class="tiny" id="timerLabel">Ready • 10:00</div><div class="tiny">Photos: <span id="photos">0</span></div></div>
+      <div class="row" style="margin-bottom:8px"><button class="btn" onclick="startDive(600)">Start 10:00</button><button class="btn ghost" onclick="startDive(60)">Demo 1:00</button><button class="btn ghost" onclick="stopDive()">Stop</button></div></div>
+    <div class="grid">
+      <div class="game"><h3>Bubble Burst</h3><div class="row"><button class="btn" onclick="startBubbles()">Start</button><button class="btn ghost" onclick="stopBubbles()">Stop</button><div class="tiny">Score: <span id="bubbleScore">0</span></div></div><div class="popsea" id="popsea"></div></div>
+      <div class="game"><h3>Name 3 Fish</h3><div class="photo"><img id="fishPhoto" alt="Fish photo" crossorigin="anonymous" loading="eager"></div>
+        <div class="tiny">Tap the correct name:</div><div class="chips" id="fishChips"></div><div class="tiny" id="nameStatus">0 / 3</div>
+        <div class="tiny">Photos: Wikimedia/NOAA. Fallback to local thumbnails if needed.</div></div>
+      <div class="game"><h3>Diving & Marine Quiz (100)</h3><div class="q" id="quizQ"></div><div id="quizOpts" class="chips"></div><div class="tiny" id="quizMsg"></div></div>
+      <div class="game"><h3>Spot Hidden Marine Life</h3><div class="tiny">Rotating coral scenes.</div><div class="garden" id="garden"></div><div class="tiny">Found: <span id="foundCount">0</span> / <span id="foundTotal">0</span></div></div>
+    </div>
+  </div>
+</div>
+<footer>Local-first • v4.3.4</footer>
+<script src="script.js?v=434"></script></body></html>
